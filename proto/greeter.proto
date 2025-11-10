@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package greeter;
+
+option go_package = "grpc-demo/proto";
+
+// 定义问候服务
+service Greeter {
+  // 简单的问候方法
+  rpc SayHello (HelloRequest) returns (HelloResponse) {}
+
+  // 服务器流式RPC - 服务器返回多条消息
+  rpc SayHelloMultipleTimes (HelloRequest) returns (stream HelloResponse) {}
+}
+
+// 请求消息
+message HelloRequest {
+  string name = 1;
+}
+
+// 响应消息
+message HelloResponse {
+  string message = 1;
+  int32 count = 2;
+}
+
