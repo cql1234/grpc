@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package memory_service;
+
+option go_package = "NewWorld/proto";
+
+// ===== 数据结构定义 =====
+message ChatItem {
+  string role = 1;        // "user" 或 "assistant"
+  string content = 2;     // 消息内容
+}
+
+message MemoryItem {
+  string id = 1;                              // 唯一ID
+  string memory = 2;                          // 记忆内容
+  string hash = 3;                            // 哈希值
+  map<string,string> metadata = 4;            // 元数据 (包含 receiver_id 和 speaker_id)
+  string created_at = 5;                      // 创建时间
+  string updated_at = 6;                      // 更新时间 (可为空)
+  string user_id = 7;                         // 用户ID
+  double score = 8;                           // 相关度/评分
+}
+
+message ResponseItem {
+  int64 code = 1;    // code
+  string msg = 2;    // msg
+}
+
+// ===== 请求/响应消息 =====
+// 添加记忆
+message AddMemoryRequest {
+  repeated ChatItem messages = 1;   // 要添加的对话消息
+  string user_id = 2;
+  string speaker_id = 3;
+  string receiver_id = 4;
+}
+
+message AddMemoryResponse {
+  repeated ResponseItem messages = 1; // code msg
+}
+
+// 获取所有记忆
+message GetAllMemoriesRequest {
+  string user_id = 1;
+  string speaker_id = 2;
+  string receiver_id = 3;
+}
+
+message GetAllMemoriesResponse {
+  repeated MemoryItem memories = 1; // 所有匹配的记忆项
+}
+
+// 搜索记忆
+message SearchMemoriesRequest {
+  string query = 1;        // 搜索内容
+  string user_id = 2;
+  string receiver_id = 3;
+  string speaker_id = 4;
+  int64 limit = 5;
+}
+
+message SearchMemoriesResponse {
+  repeated MemoryItem results = 1; // 搜索结果
+}
+
+// 删除单条记忆
+message DeleteMemoryRequest {
+  string memo_id = 1; // 要删除的记忆ID
+}
+
+// 删除全部（可按条件）
+message DeleteAllRequest {
+  string user_id = 1;
+  string speaker_id = 2;   // 可选参数
+  string receiver_id = 3;  // 可选参数
+}
+
+message DeleteResponse {
+  repeated ResponseItem messages = 1; // code msg
+}
+
+// ===== 服务定义 =====
+service MemoryService {
+  rpc AddMemory(AddMemoryRequest) returns (AddMemoryResponse);
+  rpc GetAllMemories(GetAllMemoriesRequest) returns (GetAllMemoriesResponse);
+  rpc SearchMemories(SearchMemoriesRequest) returns (SearchMemoriesResponse);
+  rpc DeleteMemory(DeleteMemoryRequest) returns (DeleteResponse);
+  rpc DeleteAll(DeleteAllRequest) returns (DeleteResponse);
+}
