@@ -55,5 +55,5 @@ func main() {
 		log.Printf("收到流式响应: %s (count: %d)", resp.Message, resp.Count)
 	}
 
-	log.Println("\n客户端演示完成!123456")
+	log.Println("\n客户端演示完成!")
 }
