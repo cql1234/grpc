@@ -18,7 +18,7 @@ type server struct {
 }
 
 // SayHello 实现简单的问候
-func (s *server) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloResponse, error) {
+func (s *server) SayHello(_ context.Context, req *pb.HelloRequest) (*pb.HelloResponse, error) {
 	log.Printf("收到请求: name=%s", req.Name)
 
 	return &pb.HelloResponse{

@@ -14,11 +14,11 @@ import (
 
 func main() {
 	// 连接到gRPC服务器
-	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("连接失败: %v", err)
 	}
-	defer conn.Close()
+	defer conn.Close().Error()
 
 	// 创建客户端
 	client := pb.NewGreeterClient(conn)
@@ -55,5 +55,5 @@ func main() {
 		log.Printf("收到流式响应: %s (count: %d)", resp.Message, resp.Count)
 	}
 
-	log.Println("\n客户端演示完成!")
+	log.Println("\n客户端演示完成!123456")
 }
